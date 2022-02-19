@@ -105,8 +105,25 @@ class Category2Controller extends Controller
 
     
      }
-    //  public function userCategory()
-    //  {
-    //      return response()->json(auth('api')->user());
+    //  public function getCategory($id){ 
+
+    //     $category =DB::table('quizzes')->where('id',$id)->get();
+           
+    //     //dd($curd);
+    //     if($category){
+    //         return response()->json($data = [
+    //         'status' => 200,
+    //         'msg'=>'Show Quiz Category !!',
+    //         'response' => $category
+    //         ]);
+    //     }
+    //     else{
+    //         return response()->json($data = [
+    //         'status' => 201,
+    //         'msg' => 'Data Not Found'
+    //         ]);
+    //     }
+
+    
     //  }
 }

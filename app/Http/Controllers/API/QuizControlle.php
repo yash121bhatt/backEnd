@@ -26,7 +26,7 @@ class QuizControlle extends Controller
 			'desc' => 'required|string|min:6',
             'maxMark' => 'required|numeric|min:1', 
             'numberOfQuestion' => 'required|numeric|min:1',
-            'category' => 'required|string',
+            'category' => 'required',
         ]);
 		if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
@@ -80,30 +80,32 @@ class QuizControlle extends Controller
      }
 
         //editQuiz
-     public function updateQuiz($id, Request $request){ //obj model ka Curd
-        dd($request->all());
-        die;
+     public function updateQuiz(Request $request,$id=null){ //obj model ka Curd
+        // echo $id;
+        // die;
+        // dd($request->all());
+        // die;
         $validator = Validator::make($request->all(), [
 			'title' => 'required|between:2,100',
 			'desc' => 'required|string|min:6',
-            'maxMark' => 'required|numeric|min:1', 
-            'numberOfQuestion' => 'required|numeric|min:1',
-            'category' => 'required|string',
+            'max_mark' => 'required|numeric|min:1', 
+            'number_of_question' => 'required|numeric|min:1',
+            'category' => 'required',
         ]);
 		if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
-    
+        //  echo $id;
+        //  die;
         $quiz =DB::table('quizzes')->where('id', $id)->update([
-             
             'title' => $request->title,
 			'desc' => $request->desc,
-            'max_mark' => $request->maxMark,
-            'number_of_question' => $request->numberOfQuestion,
+            'max_mark' => $request->max_mark,
+            'number_of_question' => $request->number_of_question,
             'category' => $request->category,
         ]);
            
-        //dd($curd);
+        // dd($quiz);
         if($quiz){
             return response()->json($data = [
             'status' => 200,
@@ -120,5 +122,28 @@ class QuizControlle extends Controller
 
     
      }
+     //get Quiz
+     public function getQuiz($catName){ //obj model ka Curd
+
+        $quiz =DB::table('quizzes')->where('category',$catName)->get(); 
+        //dd($curd);
+        if($quiz){
+            return response()->json($data = [
+            'status' => 200,
+            'msg'=>'Show Quiz Data !!',
+            'response' => $quiz
+            ]);
+        }
+        else{
+            return response()->json($data = [
+            'status' => 201,
+            'msg' => 'Data Not Found'
+            ]);
+        }
+
+    
+     }
+
+     
 
 }

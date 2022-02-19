@@ -40,11 +40,20 @@ class QestionControlle extends Controller
         //  dd($extension);
         // exit;
         // $path=$request->file('image')->storeAs('question', $request->id.'.'.$extension);
-        $imageName = time().'.'.$request->image->extension();  
+        if($request->image){
+
+            $imageName = time().'.'.$request->image->extension();  
    
-        $request->image->move(public_path('question'), $imageName);
-        $image_path=public_path('question/').$imageName;
-        // dd($path);
+            $request->image->move(public_path('question'), $imageName);
+            $image_path=public_path('question/').$imageName;
+            // dd($path);
+
+        }
+        else{
+            $imageName = null;
+            $image_path = null; 
+        }
+       
         // exit;
         //   $image_name=$path;
         //   $image_path=$url.$path;
@@ -68,12 +77,13 @@ class QestionControlle extends Controller
     }
 
     //list_quiz
-    public function listQuestion(){
+    public function listQuestion($quizId){
 
-        $ques = DB::table('questions')->get();
+        // $ques = DB::table('questions')->get();
+        $ques = DB::table('questions')->where('quiz_id',$quizId)->get();
 		// dd($user);		
         return response()->json([
-            'message' => 'see all questions !! !!',
+            'message' => 'Quiz List !!',
             'response' => $ques
         ], 201);
     }
@@ -101,10 +111,10 @@ class QestionControlle extends Controller
      }
 
         //editQuiz
-     public function updateQestion($id, Request $request){ //obj model ka Curd
+     public function updateQuestion(Request $request,$id=null){ //obj model ka Curd
         // return  response($request);
-        dd($request->all());
-        die;
+        // dd($request->all());
+        // die;
         $validator = Validator::make($request->all(), [
 			'content' => 'required|between:2,100',
             'option1' => 'required|string', 
@@ -112,20 +122,25 @@ class QestionControlle extends Controller
             'option3' => 'required|string',
             'option4' => 'required|string',
             'answer' => 'required|string',
-            'quizId' => 'required|numeric',
+            'quiz_id' => 'required|numeric',
         ]);
 		if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
 
         $url="http://127.0.0.1:8000/public/upload/";
-
+        if($request->image){
         $imageName = time().'.'.$request->image->extension();  
-   
         $request->image->move(public_path('question'), $imageName);
         $image_path=public_path('question/').$imageName;
+        }
+        else{
+            $imageName = null;
+            $image_path = null; 
+        }
+       
     
-        $ques =DB::table('quizzes')->where('id', $id)->update([
+        $ques =DB::table('questions')->where('id', $id)->update([
              
             'content' => $request->content,
             'image_name' =>$imageName,
@@ -135,7 +150,7 @@ class QestionControlle extends Controller
             'option3' => $request->option3,
             'option4' => $request->option4,
             'answer' => $request->answer,
-            'quiz_id' => $request->quizId,
+            'quiz_id' => $request->quiz_id,
         ]);
            
         //dd($curd);
@@ -155,9 +170,27 @@ class QestionControlle extends Controller
 
     
      }
-     public function getQuestion()
-     {
-         return response()->json(auth('api')->user());
+     //get Question
+     public function getQuestion($id){ //obj model ka Curd
+
+        $ques =DB::table('questions')->where('id',$id)->get();
+           
+        // dd($ques);
+        if($ques){
+            return response()->json($data = [
+            'status' => 200,
+            'msg'=>'Show Question Data !!',
+            'response' => $ques
+            ]);
+        }
+        else{
+            return response()->json($data = [
+            'status' => 201,
+            'msg' => 'Data Not Found'
+            ]);
+        }
+
+    
      }
 
 

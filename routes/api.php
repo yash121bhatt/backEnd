@@ -63,9 +63,11 @@ Route::group([
      //listQuiz
      Route::get('list-quiz','API\QuizControlle@listQuiz');
      //editQuiz
-     Route::put('update-quiz/{id}','API\QuizControlle@updateQuiz');
+     Route::post('update-quiz/{id}','API\QuizControlle@updateQuiz');
      //deleteQuiz
      Route::delete('delete-quiz/{id}','API\QuizControlle@deleteQuiz');
+      //get Quiz
+      Route::get('get-quiz/{catName}','API\QuizControlle@getQuiz');
 
      //Question API
 
@@ -74,11 +76,11 @@ Route::group([
      //delete Question
      Route::delete('delete-ques/{id}','API\QestionControlle@deleteQuestion');
      //update Questio
-     Route::post('update-ques/{id}','API\QestionControlle@updateQestion');
+     Route::post('update-ques/{id}','API\QestionControlle@updateQuestion');
      //list Question
-     Route::get('list-ques','API\QestionControlle@listQuestion');
+     Route::get('list-ques/{quizId}','API\QestionControlle@listQuestion');
      //get Question
-     Route::get('get-ques','API\QestionControlle@getQuestion');
+     Route::get('get-ques/{id}','API\QestionControlle@getQuestion');
 
 
 });
