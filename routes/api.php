@@ -66,8 +66,10 @@ Route::group([
      Route::post('update-quiz/{id}','API\QuizControlle@updateQuiz');
      //deleteQuiz
      Route::delete('delete-quiz/{id}','API\QuizControlle@deleteQuiz');
-      //get Quiz
-      Route::get('get-quiz/{catName}','API\QuizControlle@getQuiz');
+      //get single Quiz
+     Route::get('get-quiz/{catName}','API\QuizControlle@getQuiz');
+      //get edit quiz
+      Route::get('edit-quiz/{id}','API\QuizControlle@editQuiz');
 
      //Question API
 

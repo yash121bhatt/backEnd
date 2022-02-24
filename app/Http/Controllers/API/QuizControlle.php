@@ -49,7 +49,16 @@ class QuizControlle extends Controller
     //list_quiz
     public function listQuiz(){
 
-        $quiz = DB::table('quizzes')->get();
+    //    echo auth('api')->user()->user_type;
+       
+       if(auth('api')->user()->user_type == 'ADMIN')
+       {
+        $quiz = DB::table('quizzes')->get();   
+       }
+       else{
+        $quiz = DB::table('quizzes')->where('status', 1)->get();
+       }
+       
 		// dd($user);		
         return response()->json([
             'message' => 'Quiz List !!',
@@ -144,6 +153,29 @@ class QuizControlle extends Controller
     
      }
 
+       
+      //get Quiz
+      public function editQuiz($id){ //obj model ka Curd
+
+        $quiz =DB::table('quizzes')->where('id',$id)->get(); 
+        //dd($curd);
+        if($quiz){
+            return response()->json($data = [
+            'status' => 200,
+            'msg'=>'Show Quiz Data !!',
+            'response' => $quiz
+            ]);
+        }
+        else{
+            return response()->json($data = [
+            'status' => 201,
+            'msg' => 'Data Not Found'
+            ]);
+        }
+
+    
+     }
+ 
      
 
 }
